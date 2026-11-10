@@ -46,7 +46,7 @@ export const LandingPage = () => {
         </div>
 
         {/* Main Title */}
-        <h1 className="text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight max-w-5xl mx-auto leading-[1.15] mb-6">
+        <h1 className="text-3xl sm:text-5xl lg:text-7xl font-extrabold tracking-tight max-w-5xl mx-auto leading-[1.15] mb-6 break-words">
           <span>{t('landing.heroTitle1')} </span>
           <span className="bg-gradient-to-r from-indigo-600 via-violet-600 to-pink-500 bg-clip-text text-transparent">
             {t('landing.heroTitle2')}
@@ -118,7 +118,7 @@ export const LandingPage = () => {
                   <span className="w-3 h-3 rounded-full bg-amber-500 inline-block" />
                   <span className="w-3 h-3 rounded-full bg-emerald-500 inline-block" />
                 </div>
-                <span className="text-xs font-mono font-medium text-slate-400">
+                <span className="text-xs font-mono font-medium text-slate-400 truncate max-w-[130px] sm:max-w-none">
                   worksphere.app/workspace/dashboard
                 </span>
               </div>
@@ -374,15 +374,15 @@ export const LandingPage = () => {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-stretch">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-8 items-stretch">
             {/* Starter */}
-            <div className="p-8 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col justify-between">
+            <div className="p-6 sm:p-8 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col justify-between">
               <div>
                 <h3 className="text-xl font-bold mb-2">{t('landing.planStarter')}</h3>
                 <p className="text-xs text-slate-500 dark:text-slate-400 mb-6">
                   {t('landing.planStarterDesc')}
                 </p>
-                <div className="text-4xl font-extrabold mb-6">
+                <div className="text-3xl sm:text-4xl font-extrabold mb-6">
                   {currency === 'USD' ? '$0' : "0 so'm"}
                   <span className="text-xs font-normal text-slate-400"> / free forever</span>
                 </div>
@@ -409,7 +409,7 @@ export const LandingPage = () => {
             </div>
 
             {/* Pro - Featured */}
-            <div className="p-8 rounded-3xl bg-gradient-to-b from-indigo-900/10 via-white to-white dark:from-indigo-950/40 dark:via-slate-900 dark:to-slate-900 border-2 border-indigo-600 dark:border-indigo-500 shadow-2xl relative flex flex-col justify-between transform lg:-translate-y-2">
+            <div className="p-6 sm:p-8 rounded-3xl bg-gradient-to-b from-indigo-900/10 via-white to-white dark:from-indigo-950/40 dark:via-slate-900 dark:to-slate-900 border-2 border-indigo-600 dark:border-indigo-500 shadow-2xl relative flex flex-col justify-between transform lg:-translate-y-2">
               <span className="absolute -top-3.5 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full bg-gradient-to-r from-indigo-600 to-violet-600 text-white text-xs font-extrabold shadow-md">
                 POPULAR CHOICE
               </span>
@@ -420,7 +420,7 @@ export const LandingPage = () => {
                 <p className="text-xs text-slate-500 dark:text-slate-400 mb-6">
                   {t('landing.planProDesc')}
                 </p>
-                <div className="text-4xl font-extrabold mb-6 text-slate-900 dark:text-white">
+                <div className="text-3xl sm:text-4xl font-extrabold mb-6 text-slate-900 dark:text-white">
                   {currency === 'USD' ? '$12' : "150 000 so'm"}
                   <span className="text-xs font-normal text-slate-400">{t('landing.planProPeriod')}</span>
                 </div>
@@ -448,13 +448,13 @@ export const LandingPage = () => {
             </div>
 
             {/* Agency */}
-            <div className="p-8 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col justify-between">
+            <div className="p-6 sm:p-8 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col justify-between">
               <div>
                 <h3 className="text-xl font-bold mb-2">{t('landing.planAgency')}</h3>
                 <p className="text-xs text-slate-500 dark:text-slate-400 mb-6">
                   {t('landing.planAgencyDesc')}
                 </p>
-                <div className="text-4xl font-extrabold mb-6">
+                <div className="text-3xl sm:text-4xl font-extrabold mb-6">
                   {currency === 'USD' ? '$39' : "485 000 so'm"}
                   <span className="text-xs font-normal text-slate-400">{t('landing.planAgencyPeriod')}</span>
                 </div>

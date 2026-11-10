@@ -209,8 +209,85 @@ export const InvoicesView = () => {
         </div>
       </div>
 
-      {/* Invoices List Table */}
-      <div className="rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
+      {/* Mobile Invoices Card List */}
+      <div className="md:hidden space-y-3">
+        {filteredInvoices.length === 0 ? (
+          <div className="p-8 text-center text-slate-400 text-xs rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800">
+            {t('dashboard.noInvoices')}
+          </div>
+        ) : (
+          filteredInvoices.map((inv) => (
+            <div
+              key={inv.id}
+              className="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xs space-y-3"
+            >
+              <div className="flex items-start justify-between gap-2">
+                <div>
+                  <span className="font-mono text-[11px] font-bold text-indigo-600 dark:text-indigo-400">
+                    {inv.id}
+                  </span>
+                  <h4 className="font-bold text-sm text-slate-900 dark:text-white mt-0.5">
+                    {inv.clientName}
+                  </h4>
+                  <span className="text-[11px] text-slate-500">{inv.clientEmail}</span>
+                </div>
+                <span
+                  className={`px-2.5 py-1 rounded-full font-bold text-[10px] shrink-0 ${
+                    inv.status === 'paid'
+                      ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-300'
+                      : 'bg-amber-100 text-amber-700 dark:bg-amber-950/60 dark:text-amber-300'
+                  }`}
+                >
+                  {inv.status === 'paid' ? t('common.paid') : t('common.pending')}
+                </span>
+              </div>
+
+              <div className="flex items-center justify-between text-xs pt-2 border-t border-slate-100 dark:border-slate-800">
+                <div>
+                  <span className="text-[10px] text-slate-400 block">{t('invoices.paymentDue')}</span>
+                  <span className="text-slate-600 dark:text-slate-400 font-medium">{inv.dueDate}</span>
+                </div>
+                <div className="text-right">
+                  <span className="text-[10px] text-slate-400 block">{t('common.amount')}</span>
+                  <span className="font-extrabold text-sm text-slate-900 dark:text-white">
+                    {inv.currency === 'USD'
+                      ? `$${inv.total.toLocaleString()}`
+                      : `${inv.total.toLocaleString()} so'm`}
+                  </span>
+                </div>
+              </div>
+
+              <div className="flex items-center justify-end gap-2 pt-2 border-t border-slate-100 dark:border-slate-800">
+                <button
+                  onClick={() => setPreviewInvoice(inv)}
+                  className="flex items-center gap-1 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 text-xs font-semibold text-slate-700 dark:text-slate-300"
+                >
+                  <Eye className="w-3.5 h-3.5" />
+                  <span>{t('common.view')}</span>
+                </button>
+                {inv.status === 'pending' && (
+                  <button
+                    onClick={() => markInvoicePaid(inv.id)}
+                    className="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-emerald-600 text-white text-xs font-bold"
+                  >
+                    <CheckCircle2 className="w-3.5 h-3.5" />
+                    <span>{t('invoices.markAsPaid')}</span>
+                  </button>
+                )}
+                <button
+                  onClick={() => deleteInvoice(inv.id)}
+                  className="p-1.5 rounded-lg text-slate-400 hover:text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-950/40"
+                >
+                  <Trash2 className="w-3.5 h-3.5" />
+                </button>
+              </div>
+            </div>
+          ))
+        )}
+      </div>
+
+      {/* Desktop Invoices List Table */}
+      <div className="hidden md:block rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs">
             <thead className="bg-slate-50 dark:bg-slate-800/50 border-b border-slate-200 dark:border-slate-800 text-slate-500 dark:text-slate-400 font-bold uppercase tracking-wider">
@@ -371,42 +448,50 @@ export const InvoicesView = () => {
                 const lineTotal = (Number(item.qty) || 0) * (Number(item.rate) || 0);
 
                 return (
-                  <div key={idx} className="flex items-center gap-2">
+                  <div key={idx} className="flex flex-col sm:flex-row sm:items-center gap-2 p-3 sm:p-0 rounded-xl bg-slate-50 sm:bg-transparent dark:bg-slate-800/40 sm:dark:bg-transparent border sm:border-0 border-slate-200 dark:border-slate-800">
                     <input
                       type="text"
                       required
                       placeholder="e.g. Design UI System components"
                       value={item.description}
                       onChange={(e) => handleItemChange(idx, 'description', e.target.value)}
-                      className="flex-1 px-3 py-2 text-xs rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/60 font-medium"
+                      className="w-full sm:flex-1 px-3 py-2 text-xs rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800/60 font-medium"
                     />
-                    <input
-                      type="number"
-                      min="1"
-                      placeholder="Qty"
-                      value={item.qty}
-                      onChange={(e) => handleItemChange(idx, 'qty', e.target.value)}
-                      className="w-16 px-3 py-2 text-xs rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/60 font-medium text-center"
-                    />
-                    <input
-                      type="number"
-                      placeholder="Rate"
-                      value={item.rate}
-                      onChange={(e) => handleItemChange(idx, 'rate', e.target.value)}
-                      className="w-28 px-3 py-2 text-xs rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/60 font-medium text-right"
-                    />
-                    <div className="w-24 text-right font-bold text-xs">
-                      {lineTotal.toLocaleString()}
+                    <div className="flex items-center justify-between sm:justify-start gap-2 w-full sm:w-auto">
+                      <div className="flex items-center gap-1">
+                        <span className="text-[10px] text-slate-400 sm:hidden">Qty:</span>
+                        <input
+                          type="number"
+                          min="1"
+                          placeholder="Qty"
+                          value={item.qty}
+                          onChange={(e) => handleItemChange(idx, 'qty', e.target.value)}
+                          className="w-16 px-2 py-2 text-xs rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800/60 font-medium text-center"
+                        />
+                      </div>
+                      <div className="flex items-center gap-1">
+                        <span className="text-[10px] text-slate-400 sm:hidden">Rate:</span>
+                        <input
+                          type="number"
+                          placeholder="Rate"
+                          value={item.rate}
+                          onChange={(e) => handleItemChange(idx, 'rate', e.target.value)}
+                          className="w-24 sm:w-28 px-2 py-2 text-xs rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800/60 font-medium text-right"
+                        />
+                      </div>
+                      <div className="w-20 sm:w-24 text-right font-bold text-xs truncate">
+                        {lineTotal.toLocaleString()}
+                      </div>
+                      {formData.items.length > 1 && (
+                        <button
+                          type="button"
+                          onClick={() => handleRemoveItem(idx)}
+                          className="p-1.5 text-slate-400 hover:text-rose-500 transition"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      )}
                     </div>
-                    {formData.items.length > 1 && (
-                      <button
-                        type="button"
-                        onClick={() => handleRemoveItem(idx)}
-                        className="p-1.5 text-slate-400 hover:text-rose-500"
-                      >
-                        <Trash2 className="w-4 h-4" />
-                      </button>
-                    )}
                   </div>
                 );
               })}
@@ -530,10 +615,10 @@ export const InvoicesView = () => {
             {/* Actual Printable Invoice Container */}
             <div
               id="printable-invoice"
-              className="p-8 bg-white text-slate-900 rounded-xl border border-slate-200 shadow-sm space-y-8"
+              className="p-4 sm:p-8 bg-white text-slate-900 rounded-xl border border-slate-200 shadow-sm space-y-6 sm:space-y-8"
             >
               {/* Header */}
-              <div className="flex items-start justify-between">
+              <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
                 <div>
                   <div className="text-2xl font-black text-indigo-600 tracking-tight">
                     WorkSphere
@@ -549,8 +634,8 @@ export const InvoicesView = () => {
                   </div>
                 </div>
 
-                <div className="text-right">
-                  <h2 className="text-3xl font-black text-slate-800 tracking-wider">
+                <div className="text-left sm:text-right">
+                  <h2 className="text-2xl sm:text-3xl font-black text-slate-800 tracking-wider">
                     INVOICE
                   </h2>
                   <div className="text-sm font-mono font-bold text-indigo-600 mt-1">
@@ -576,37 +661,39 @@ export const InvoicesView = () => {
                 <div className="text-xs text-slate-600">{previewInvoice.clientEmail}</div>
               </div>
 
-              {/* Items Table */}
-              <table className="w-full text-left text-xs border-collapse">
-                <thead>
-                  <tr className="border-b-2 border-slate-800 text-slate-700 font-bold uppercase">
-                    <th className="py-2.5">Service Description</th>
-                    <th className="py-2.5 text-center">Qty</th>
-                    <th className="py-2.5 text-right">Unit Rate</th>
-                    <th className="py-2.5 text-right">Amount</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-slate-200">
-                  {previewInvoice.items.map((item, idx) => (
-                    <tr key={idx}>
-                      <td className="py-3 font-medium text-slate-800">
-                        {item.description}
-                      </td>
-                      <td className="py-3 text-center text-slate-600">{item.qty}</td>
-                      <td className="py-3 text-right text-slate-600">
-                        {previewInvoice.currency === 'USD'
-                          ? `$${item.rate.toLocaleString()}`
-                          : `${item.rate.toLocaleString()} so'm`}
-                      </td>
-                      <td className="py-3 text-right font-bold text-slate-900">
-                        {previewInvoice.currency === 'USD'
-                          ? `$${item.amount.toLocaleString()}`
-                          : `${item.amount.toLocaleString()} so'm`}
-                      </td>
+              {/* Items Table with horizontal scroll safety */}
+              <div className="overflow-x-auto -mx-4 sm:mx-0 px-4 sm:px-0">
+                <table className="w-full text-left text-xs border-collapse min-w-[420px] sm:min-w-0">
+                  <thead>
+                    <tr className="border-b-2 border-slate-800 text-slate-700 font-bold uppercase">
+                      <th className="py-2.5">Service Description</th>
+                      <th className="py-2.5 text-center">Qty</th>
+                      <th className="py-2.5 text-right">Unit Rate</th>
+                      <th className="py-2.5 text-right">Amount</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody className="divide-y divide-slate-200">
+                    {previewInvoice.items.map((item, idx) => (
+                      <tr key={idx}>
+                        <td className="py-3 font-medium text-slate-800">
+                          {item.description}
+                        </td>
+                        <td className="py-3 text-center text-slate-600">{item.qty}</td>
+                        <td className="py-3 text-right text-slate-600">
+                          {previewInvoice.currency === 'USD'
+                            ? `$${item.rate.toLocaleString()}`
+                            : `${item.rate.toLocaleString()} so'm`}
+                        </td>
+                        <td className="py-3 text-right font-bold text-slate-900">
+                          {previewInvoice.currency === 'USD'
+                            ? `$${item.amount.toLocaleString()}`
+                            : `${item.amount.toLocaleString()} so'm`}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
 
               {/* Financial Calculation */}
               <div className="flex justify-end pt-4">

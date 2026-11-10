@@ -91,10 +91,10 @@ export const DashboardView = () => {
         </div>
 
         {/* Action Shortcuts */}
-        <div className="flex flex-wrap items-center gap-2.5">
+        <div className="grid grid-cols-2 sm:flex sm:items-center gap-2 sm:gap-2.5 w-full sm:w-auto">
           <button
             onClick={() => setCurrentPage('projects')}
-            className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-xs font-bold text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800/80 transition shadow-sm"
+            className="flex items-center justify-center gap-1.5 px-3.5 py-2.5 sm:py-2 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-xs font-bold text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800/80 transition shadow-xs"
           >
             <Plus className="w-3.5 h-3.5 text-indigo-500" />
             <span>{t('dashboard.newProject')}</span>
@@ -102,7 +102,7 @@ export const DashboardView = () => {
 
           <button
             onClick={() => setCurrentPage('invoices')}
-            className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-500 hover:to-violet-500 text-white text-xs font-bold shadow-md shadow-indigo-500/25 transition active:scale-95"
+            className="flex items-center justify-center gap-1.5 px-4 py-2.5 sm:py-2 rounded-xl bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-500 hover:to-violet-500 text-white text-xs font-bold shadow-md shadow-indigo-500/25 transition active:scale-95"
           >
             <Receipt className="w-3.5 h-3.5" />
             <span>{t('dashboard.newInvoice')}</span>
@@ -214,21 +214,21 @@ export const DashboardView = () => {
           </div>
 
           {/* Bar Chart Visualization */}
-          <div className="h-56 flex items-end justify-between gap-3 pt-6 px-2">
+          <div className="h-56 flex items-end justify-between gap-1.5 sm:gap-3 pt-6 px-1 sm:px-2 overflow-x-auto no-scrollbar">
             {monthlyRevenueData.map((item, idx) => {
               const heightPercent = Math.round((item.revenueUSD / maxRevenue) * 100);
               return (
-                <div key={idx} className="flex-1 flex flex-col items-center gap-2 group">
-                  <div className="opacity-0 group-hover:opacity-100 transition-opacity text-[11px] font-bold text-slate-700 dark:text-slate-300 -translate-y-1">
+                <div key={idx} className="flex-1 min-w-[36px] flex flex-col items-center gap-1.5 sm:gap-2 group">
+                  <div className="opacity-0 group-hover:opacity-100 transition-opacity text-[10px] sm:text-[11px] font-bold text-slate-700 dark:text-slate-300 -translate-y-1">
                     {formatMoney(item.revenueUSD)}
                   </div>
                   <div className="w-full max-w-[42px] bg-slate-100 dark:bg-slate-800/80 rounded-xl p-1 h-44 flex items-end">
                     <div
-                      className="w-full rounded-lg bg-gradient-to-t from-indigo-600 via-indigo-500 to-violet-500 transition-all duration-500 group-hover:brightness-110 shadow-sm"
+                      className="w-full rounded-lg bg-gradient-to-t from-indigo-600 via-indigo-500 to-violet-500 transition-all duration-500 group-hover:brightness-110 shadow-xs"
                       style={{ height: `${heightPercent}%` }}
                     />
                   </div>
-                  <span className="text-[11px] font-semibold text-slate-500 dark:text-slate-400 truncate max-w-full">
+                  <span className="text-[10px] sm:text-[11px] font-semibold text-slate-500 dark:text-slate-400 truncate max-w-full text-center">
                     {item.month}
                   </span>
                 </div>

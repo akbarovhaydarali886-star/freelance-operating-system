@@ -68,7 +68,7 @@ export const SettingsView = () => {
       </div>
 
       {/* 1. Profile Section */}
-      <div className="p-6 sm:p-8 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm space-y-6">
+      <div className="p-5 sm:p-8 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm space-y-6">
         <div className="flex items-center gap-3 pb-4 border-b border-slate-100 dark:border-slate-800">
           <div className="w-10 h-10 rounded-xl bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 flex items-center justify-center">
             <User className="w-5 h-5" />
@@ -210,7 +210,7 @@ export const SettingsView = () => {
           <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-2">
             {t('settings.themeLabel')}
           </label>
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
             <button
               type="button"
               onClick={() => {
@@ -283,7 +283,7 @@ export const SettingsView = () => {
           <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-2">
             {t('settings.currencyLabel')}
           </label>
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
             <button
               type="button"
               onClick={() => setCurrency('USD')}

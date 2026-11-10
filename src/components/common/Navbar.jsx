@@ -247,11 +247,12 @@ export const Navbar = () => {
         </div>
 
         {/* Mobile menu button */}
-        <div className="flex lg:hidden items-center gap-2">
+        <div className="flex lg:hidden items-center gap-1.5 sm:gap-2">
           {/* Quick theme toggle */}
           <button
             onClick={toggleTheme}
-            className="p-2 rounded-lg border border-slate-200 dark:border-slate-800"
+            aria-label="Toggle theme"
+            className="p-2 rounded-xl border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-900 transition"
           >
             {theme === 'dark' ? (
               <Sun className="w-4 h-4 text-amber-400" />
@@ -261,7 +262,8 @@ export const Navbar = () => {
           </button>
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="p-2 rounded-lg border border-slate-200 dark:border-slate-800"
+            aria-label="Toggle navigation menu"
+            className="p-2 rounded-xl border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-900 transition"
           >
             {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
           </button>
@@ -270,35 +272,120 @@ export const Navbar = () => {
 
       {/* Mobile Drawer */}
       {mobileMenuOpen && (
-        <div className="lg:hidden border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 p-4 space-y-3">
+        <div className="lg:hidden border-t border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-950/95 backdrop-blur-xl p-4 space-y-4 max-h-[85vh] overflow-y-auto shadow-2xl animate-in slide-in-from-top-2 duration-200">
           {/* 3-Language Mobile Switcher */}
-          <div className="grid grid-cols-3 gap-2">
-            {languages.map((l) => (
-              <button
-                key={l.code}
-                onClick={() => {
-                  setLang(l.code);
-                  setMobileMenuOpen(false);
-                }}
-                className={`flex items-center justify-center gap-1.5 py-2 px-2 rounded-lg border text-xs font-semibold ${
-                  lang === l.code
-                    ? 'border-indigo-600 bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400'
-                    : 'border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300'
-                }`}
-              >
-                <FlagIcon code={l.code} className="w-5 h-3.5 rounded-[2px] shadow-xs" />
-                <span className="truncate">{l.label}</span>
-              </button>
-            ))}
+          <div>
+            <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500 mb-2 block">
+              {t('common.language')}
+            </span>
+            <div className="grid grid-cols-3 gap-2">
+              {languages.map((l) => (
+                <button
+                  key={l.code}
+                  onClick={() => {
+                    setLang(l.code);
+                  }}
+                  className={`flex items-center justify-center gap-1.5 py-2 px-2 rounded-xl border text-xs font-semibold transition ${
+                    lang === l.code
+                      ? 'border-indigo-600 bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 shadow-xs'
+                      : 'border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-900'
+                  }`}
+                >
+                  <FlagIcon code={l.code} className="w-4 h-3 rounded-[2px] shadow-xs" />
+                  <span className="truncate">{l.short}</span>
+                </button>
+              ))}
+            </div>
           </div>
 
-          <div className="pt-2 border-t border-slate-200 dark:border-slate-800 flex flex-col gap-1.5">
+          {/* Currency & Live Timer on Mobile */}
+          <div className="grid grid-cols-2 gap-2 pt-2 border-t border-slate-200 dark:border-slate-800">
+            {/* Currency toggle */}
+            <button
+              onClick={() => setCurrency(currency === 'USD' ? 'UZS' : 'USD')}
+              className="flex items-center justify-center gap-1.5 py-2 px-3 rounded-xl border border-slate-200 dark:border-slate-800 text-xs font-semibold text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-900 transition"
+            >
+              <DollarSign className="w-3.5 h-3.5 text-indigo-500" />
+              <span>{currency === 'USD' ? 'USD ($)' : "UZS (so'm)"}</span>
+            </button>
+
+            {/* Timer quick control */}
+            <div className="flex items-center justify-between px-2.5 py-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/50 text-xs font-mono">
+              <span className="font-semibold text-slate-700 dark:text-slate-300 text-[11px]">
+                {formatTimer(timerSeconds)}
+              </span>
+              <button
+                onClick={toggleTimer}
+                className={`p-1 rounded-lg transition ${
+                  timerRunning
+                    ? 'bg-amber-100 dark:bg-amber-900/40 text-amber-600 dark:text-amber-400'
+                    : 'bg-emerald-100 dark:bg-emerald-900/40 text-emerald-600 dark:text-emerald-400'
+                }`}
+              >
+                {timerRunning ? <Pause className="w-3 h-3" /> : <Play className="w-3 h-3" />}
+              </button>
+            </div>
+          </div>
+
+          {/* User profile or auth in mobile drawer */}
+          <div className="pt-2 border-t border-slate-200 dark:border-slate-800">
+            {user ? (
+              <div className="flex items-center justify-between p-3 rounded-2xl bg-slate-50 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800">
+                <div className="flex items-center gap-2.5">
+                  <img
+                    src={user.avatar}
+                    alt={user.name}
+                    className="w-9 h-9 rounded-xl object-cover border border-indigo-500/40"
+                  />
+                  <div className="text-left">
+                    <div className="text-xs font-bold text-slate-900 dark:text-white leading-tight">
+                      {user.name}
+                    </div>
+                    <div className="text-[10px] text-slate-500 dark:text-slate-400 truncate max-w-[140px]">
+                      {user.company}
+                    </div>
+                  </div>
+                </div>
+                <button
+                  onClick={() => {
+                    logoutUser();
+                    setMobileMenuOpen(false);
+                  }}
+                  title={t('nav.logout')}
+                  className="p-2 rounded-xl text-rose-600 dark:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/40 transition"
+                >
+                  <LogOut className="w-4 h-4" />
+                </button>
+              </div>
+            ) : (
+              <button
+                onClick={() => {
+                  setCurrentPage('auth');
+                  setMobileMenuOpen(false);
+                }}
+                className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl bg-gradient-to-r from-indigo-600 to-violet-600 text-white text-xs font-bold shadow-md shadow-indigo-500/20"
+              >
+                <Sparkles className="w-4 h-4" />
+                <span>{t('nav.login')}</span>
+              </button>
+            )}
+          </div>
+
+          {/* Navigation Links */}
+          <div className="pt-2 border-t border-slate-200 dark:border-slate-800 flex flex-col gap-1">
+            <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500 mb-1 px-2">
+              Menu
+            </span>
             <button
               onClick={() => {
                 setCurrentPage('landing');
                 setMobileMenuOpen(false);
               }}
-              className="w-full text-left px-3 py-2 rounded-lg text-sm font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-900"
+              className={`w-full text-left px-3 py-2 rounded-xl text-sm font-semibold transition ${
+                currentPage === 'landing'
+                  ? 'bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400'
+                  : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-900'
+              }`}
             >
               {t('nav.landing')}
             </button>
@@ -307,7 +394,11 @@ export const Navbar = () => {
                 setCurrentPage('dashboard');
                 setMobileMenuOpen(false);
               }}
-              className="w-full text-left px-3 py-2 rounded-lg text-sm font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-900"
+              className={`w-full text-left px-3 py-2 rounded-xl text-sm font-semibold transition ${
+                currentPage === 'dashboard'
+                  ? 'bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400'
+                  : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-900'
+              }`}
             >
               {t('nav.dashboard')}
             </button>
@@ -316,7 +407,11 @@ export const Navbar = () => {
                 setCurrentPage('projects');
                 setMobileMenuOpen(false);
               }}
-              className="w-full text-left px-3 py-2 rounded-lg text-sm font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-900"
+              className={`w-full text-left px-3 py-2 rounded-xl text-sm font-semibold transition ${
+                currentPage === 'projects'
+                  ? 'bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400'
+                  : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-900'
+              }`}
             >
               {t('nav.projects')}
             </button>
@@ -325,7 +420,11 @@ export const Navbar = () => {
                 setCurrentPage('invoices');
                 setMobileMenuOpen(false);
               }}
-              className="w-full text-left px-3 py-2 rounded-lg text-sm font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-900"
+              className={`w-full text-left px-3 py-2 rounded-xl text-sm font-semibold transition ${
+                currentPage === 'invoices'
+                  ? 'bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400'
+                  : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-900'
+              }`}
             >
               {t('nav.invoices')}
             </button>
@@ -334,7 +433,11 @@ export const Navbar = () => {
                 setCurrentPage('clients');
                 setMobileMenuOpen(false);
               }}
-              className="w-full text-left px-3 py-2 rounded-lg text-sm font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-900"
+              className={`w-full text-left px-3 py-2 rounded-xl text-sm font-semibold transition ${
+                currentPage === 'clients'
+                  ? 'bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400'
+                  : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-900'
+              }`}
             >
               {t('nav.clients')}
             </button>
@@ -343,7 +446,11 @@ export const Navbar = () => {
                 setCurrentPage('analytics');
                 setMobileMenuOpen(false);
               }}
-              className="w-full text-left px-3 py-2 rounded-lg text-sm font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-900"
+              className={`w-full text-left px-3 py-2 rounded-xl text-sm font-semibold transition ${
+                currentPage === 'analytics'
+                  ? 'bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400'
+                  : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-900'
+              }`}
             >
               {t('nav.analytics')}
             </button>
@@ -352,7 +459,11 @@ export const Navbar = () => {
                 setCurrentPage('settings');
                 setMobileMenuOpen(false);
               }}
-              className="w-full text-left px-3 py-2 rounded-lg text-sm font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-900"
+              className={`w-full text-left px-3 py-2 rounded-xl text-sm font-semibold transition ${
+                currentPage === 'settings'
+                  ? 'bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400'
+                  : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-900'
+              }`}
             >
               {t('nav.settings')}
             </button>

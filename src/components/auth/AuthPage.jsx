@@ -198,7 +198,7 @@ export const AuthPage = () => {
         </div>
 
         {/* Regular Auth Card with Enhanced Validations */}
-        <div className="p-6 sm:p-8 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xl">
+        <div className="p-5 sm:p-8 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xl">
           {/* Mode Switcher Tabs */}
           {mode !== 'forgot' && (
             <div className="flex p-1 bg-slate-100 dark:bg-slate-800 rounded-xl mb-6">

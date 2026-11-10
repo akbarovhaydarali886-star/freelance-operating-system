@@ -21,6 +21,7 @@ export const KanbanBoard = () => {
 
   const [searchQuery, setSearchQuery] = useState('');
   const [priorityFilter, setPriorityFilter] = useState('all');
+  const [activeMobileCol, setActiveMobileCol] = useState('all');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingTask, setEditingTask] = useState(null);
 
@@ -183,15 +184,51 @@ export const KanbanBoard = () => {
         </div>
       </div>
 
+      {/* Mobile Column Quick-Selector Tabs */}
+      <div className="flex xl:hidden items-center gap-1.5 overflow-x-auto pb-1 -mx-2 px-2 no-scrollbar">
+        <button
+          onClick={() => setActiveMobileCol('all')}
+          className={`px-3 py-1.5 rounded-xl text-xs font-bold shrink-0 transition ${
+            activeMobileCol === 'all'
+              ? 'bg-indigo-600 text-white shadow-sm'
+              : 'bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400'
+          }`}
+        >
+          {t('common.all')} ({filteredTasks.length})
+        </button>
+        {columns.map((c) => {
+          const count = filteredTasks.filter((t) => t.column === c.id).length;
+          return (
+            <button
+              key={c.id}
+              onClick={() => setActiveMobileCol(c.id)}
+              className={`px-3 py-1.5 rounded-xl text-xs font-bold shrink-0 transition flex items-center gap-1.5 ${
+                activeMobileCol === c.id
+                  ? 'bg-indigo-600 text-white shadow-sm'
+                  : 'bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400'
+              }`}
+            >
+              <span>{c.title}</span>
+              <span className={`text-[10px] px-1.5 py-0.2 rounded-full ${activeMobileCol === c.id ? 'bg-white/20 text-white' : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400'}`}>
+                {count}
+              </span>
+            </button>
+          );
+        })}
+      </div>
+
       {/* 4 Kanban Columns */}
-      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-5 items-start">
+      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4 sm:gap-5 items-start">
         {columns.map((column) => {
           const colTasks = filteredTasks.filter((t) => t.column === column.id);
+          const isHiddenOnMobile = activeMobileCol !== 'all' && activeMobileCol !== column.id;
+
+          if (isHiddenOnMobile) return null;
 
           return (
             <div
               key={column.id}
-              className="flex flex-col rounded-2xl bg-slate-100/70 dark:bg-slate-900/50 border border-slate-200/80 dark:border-slate-800 p-4 min-h-[500px]"
+              className="flex flex-col rounded-2xl bg-slate-100/70 dark:bg-slate-900/50 border border-slate-200/80 dark:border-slate-800 p-3.5 sm:p-4 min-h-[300px] xl:min-h-[500px]"
             >
               {/* Column Header */}
               <div className="flex items-center justify-between pb-3 mb-3 border-b border-slate-200 dark:border-slate-800">
@@ -219,7 +256,7 @@ export const KanbanBoard = () => {
                     return (
                       <div
                         key={task.id}
-                        className="p-4 rounded-xl bg-white dark:bg-slate-800/90 border border-slate-200 dark:border-slate-700/80 shadow-sm hover:shadow-md transition-all group space-y-3"
+                        className="p-3.5 sm:p-4 rounded-xl bg-white dark:bg-slate-800/90 border border-slate-200 dark:border-slate-700/80 shadow-xs hover:shadow-md transition-all group space-y-3"
                       >
                         {/* Header: Priority & Actions */}
                         <div className="flex items-center justify-between">
@@ -237,18 +274,18 @@ export const KanbanBoard = () => {
                             {t(`common.${task.priority}`)}
                           </span>
 
-                          <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                          <div className="flex items-center gap-1 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity">
                             <button
                               onClick={() => openEditModal(task)}
                               title={t('common.edit')}
-                              className="p-1 rounded text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700"
+                              className="p-1.5 rounded-lg text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700 transition"
                             >
                               <Edit2 className="w-3.5 h-3.5" />
                             </button>
                             <button
                               onClick={() => deleteTask(task.id)}
                               title={t('common.delete')}
-                              className="p-1 rounded text-slate-400 hover:text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-950/40"
+                              className="p-1.5 rounded-lg text-slate-400 hover:text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-950/40 transition"
                             >
                               <Trash2 className="w-3.5 h-3.5" />
                             </button>

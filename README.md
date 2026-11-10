@@ -24,6 +24,8 @@
   - Mijozlar kartotekasi, aloqa kontaktlari (Email, Telefon), to'langan summalar va faol buyurtmalar hisobi.
 - ⏱️ **Live Billable Time Tracker**:
   - Soatbay ishlovchilar uchun jonli sekundomer va bugungi ishlangan vaqt hisoblagichi.
+- 📱 **100% Mobile & Tablet Responsive**:
+  - Maxsus **Mobile Bottom Navigation Bar** (SaaS ilovalar uslubida), Kanban doskasida ustunlarni bir zumda almashtiruvchi qulay Mobile Tabs, Invoyslar uchun maxsus Mobile Card rejimi hamda sensorli ekranlar uchun qulay boshqaruv elementlari.
 - 💾 **Local Persistence**:
   - Barcha o'zgarishlar brauzerda saqlanib qoladi. "Reset Demo Data" orqali istalgan paytda boshlang'ich holatga qaytarish mumkin.
 
